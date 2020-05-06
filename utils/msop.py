@@ -91,7 +91,7 @@ def maskonly(src, ind, diameter):
     return masked
 
 
-def nonmaxsup(src, maxf=500, r=-1):
+def nonmaxsup(src, maxf=500, r=-1, maxstep=1000):
     # while (not enough feature point selected)
     # set r - 1
     # while (features is not all zeros)
@@ -101,7 +101,8 @@ def nonmaxsup(src, maxf=500, r=-1):
     if r == -1:
         r = src.shape[0]//10
         
-    while(len(fps) <= maxf):
+    step = 0
+    while(len(fps) <= maxf and step < maxstep and r > 1):
         r = r - 1
         fmap = copy.deepcopy(src)
         
@@ -115,6 +116,7 @@ def nonmaxsup(src, maxf=500, r=-1):
             fmap = masksurby(fmap, ind, r, 0)
             
             fps.append(point2d(value = maxn, coord = ind)) # collect new selected feature
+        step += 1
     return fps
 
 def cylindrical_projection(img, focal_length):
