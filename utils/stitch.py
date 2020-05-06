@@ -150,7 +150,6 @@ def blending(ms, prjimgs):
 
     (hA, wA) = prjimgs[0].shape[:2]
     vis = np.zeros((hA +  dH, wA + dW, 3), dtype="float64")
-
     for idx in range( len(ms)):
         m1 ,m2 = ms[idx]
 
@@ -176,13 +175,17 @@ def blending(ms, prjimgs):
         w2 = math.fabs(m2)/(math.fabs(m2)+math.fabs(m1))
 
         m = mask11[absm1:, absm2:]
-        mask11[absm1:, absm2:] = (m * np.arange((blendh), 0,  -1)[:, np.newaxis, np.newaxis] / blendh * w1)                                 + (m * np.arange((blendw), 0,  -1)[ np.newaxis, :, np.newaxis] / blendw * w2)
+        mask11[absm1:, absm2:] = (m * np.arange((blendh), 0,  -1)[:, np.newaxis, np.newaxis] / blendh * w1) \
+                                    + (m * np.arange((blendw), 0,  -1)[ np.newaxis, :, np.newaxis] / blendw * w2)
         m = mask21[:mabsm1, absm2:]
-        mask21[:mabsm1, absm2:] = m * np.arange(0, (blendh), 1)[:, np.newaxis, np.newaxis] / blendh * w1                                 + m * np.arange((blendw), 0,  -1)[ np.newaxis, :, np.newaxis] / blendw * w2
+        mask21[:mabsm1, absm2:] = m * np.arange(0, (blendh), 1)[:, np.newaxis, np.newaxis] / blendh * w1 \
+                                    + m * np.arange((blendw), 0,  -1)[ np.newaxis, :, np.newaxis] / blendw * w2
         m = mask12[absm1:, :mabsm2]
-        mask12[absm1:, :mabsm2] =  m * np.arange((blendh), 0,  -1)[:, np.newaxis, np.newaxis] / blendh * w1                                 + m * np.arange(0, (blendw), 1)[ np.newaxis, :, np.newaxis] / blendw * w2
+        mask12[absm1:, :mabsm2] =  m * np.arange((blendh), 0,  -1)[:, np.newaxis, np.newaxis] / blendh * w1 \
+                                    + m * np.arange(0, (blendw), 1)[ np.newaxis, :, np.newaxis] / blendw * w2
         m =  mask22[:mabsm1, :mabsm2] 
-        mask22[:mabsm1, :mabsm2] =  (m *  np.arange(0, (blendh), 1)[:, np.newaxis, np.newaxis] / blendh * w1)                                 + (m *  np.arange(0, (blendw), 1)[ np.newaxis, :, np.newaxis] / blendw * w2)
+        mask22[:mabsm1, :mabsm2] =  (m *  np.arange(0, (blendh), 1)[:, np.newaxis, np.newaxis] / blendh * w1) \
+                                    + (m *  np.arange(0, (blendw), 1)[ np.newaxis, :, np.newaxis] / blendw * w2)
 
 
         if m2 >= 0 and m1 >= 0:
@@ -204,17 +207,23 @@ def blending(ms, prjimgs):
 
         if (idx == 0):
             newOH = dH//2
-            newOW = dW//2
+            newOW = dW//2 
             vis[newOH : newOH + hA, newOW : newOW + wA] = ablended # A
-
+            ablendori = ablended
+            bblendori = bblended
+            amaskori = amask
+            bmaskori = bmask
+            #print(newOH)
         else:
             vis[ bOH : bOH + hB, bOW : bOW + wB] = vis[ bOH : bOH + hB, bOW : bOW + wB]  * amask
             bblended = prjimgs[idx+1] * bmask
             newOH = bOH
             newOW = bOW
-            
+
+
         bOH = math.ceil(newOH+m1)
         bOW = math.ceil(newOW+m2)
+
         vis[ bOH : bOH + hB, bOW : bOW + wB] += bblended # B
 
 

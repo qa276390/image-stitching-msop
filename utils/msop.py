@@ -154,20 +154,18 @@ def msop(orimg, maxfeat=300, n_pym = 2, prj=False, focal_length=0):
     img = cv2.cvtColor(orimg,cv2.COLOR_BGR2GRAY)
     
     ### Harris Corner Response
-    print('Computing Harris Corner Response...')
+    #print('Computing Harris Corner Response...')
     hrpy = [] #harris response pyramid
     srcs = [] #image source pyramid
     src = img
     for i in range(n_pym):
         dst = compute_harris_responce(src)
-        #srcs.append(cv2.resize(upscaling(src, i), (img.shape[1], img.shape[0]))) # store the origin size src
-        #hrpy.append(cv2.resize(upscaling(dst, i), (img.shape[1], img.shape[0]))) # store the origin size response
         srcs.append(src) # store the pyramid size src
         hrpy.append(dst) # store the pyramid size response
         src = cv2.pyrDown(cv2.pyrDown(src))
         
     ### Projection to Cylindrical 
-    print('Projection to Cylindrical...')
+    #print('Projection to Cylindrical...')
     if (prj):
         if(focal_length==0):
             print('Please Specify Focal Length!')
@@ -177,13 +175,13 @@ def msop(orimg, maxfeat=300, n_pym = 2, prj=False, focal_length=0):
             srcs[i] =  cylindrical_projection(srcs[i], focal_length)
         
     ### Non Maximum Suppression
-    print('Computing Non Maximum Suppression...')
+    #print('Computing Non Maximum Suppression...')
     fpspy = []
     for hr in hrpy:
         fpspy.append(nonmaxsup(hr, maxf=maxfeat))
 
     ### Descriptor (Orientation included)
-    print('Constructing Descriptor...')
+    #print('Constructing Descriptor...')
     descspy = []
     for i in range(n_pym):
         fps = fpspy[i]
