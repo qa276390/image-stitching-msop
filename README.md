@@ -63,7 +63,7 @@ python3 main.py --help
 </table>
 
 ### Stitching Image
-<img src="https://i.imgur.com/b8hCK6y.jpg" width="1000"/>
+<img src="https://i.imgur.com/50Alq3B.jpg" width="1000"/>
 
 
 ## Acknowledgements and Links
